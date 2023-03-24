@@ -89,11 +89,12 @@ MAIN_SCRIPT_PATH="${SCRIPT_DIR}/main.py"
 EXEC_COMMAND="\"${PYTHON_VENV_PATH}\" \"${MAIN_SCRIPT_PATH}\""
 CATEGORIES="Utility;Graphics;"
 
-$SUDO_CMD printf "[Desktop Entry]\nVersion=1.0\nName=%s\nComment=Gerador de QR Code com Estilo\nExec=%s\nIcon=%s\nTerminal=false\nType=Application\nCategories=%s\nStartupNotify=true\nPath=%s\n" \
+$SUDO_CMD printf "[Desktop Entry]\nVersion=1.0\nName=%s\nComment=Gerador de QR Code com Estilo\nExec=%s\nIcon=%s\nTerminal=false\nType=Application\nCategories=%s\nStartupNotify=true\nStartupWMClass=%s\nPath=%s\n" \
     "${APP_DISPLAY_NAME}" \
     "${EXEC_COMMAND}" \
     "${ICON_NAME}" \
     "${CATEGORIES}" \
+    "${APP_NAME}" \
     "${SCRIPT_DIR}" \
     > "${DESKTOP_FILE_PATH}" || { echo "ERRO: Falha ao criar arquivo .desktop."; exit 1; }
 

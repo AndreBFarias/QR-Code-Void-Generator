@@ -15,7 +15,7 @@ class ConfigManager:
         config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'layout_config.ini')
         self.config.read(config_path, encoding='utf-8')
 
-    def get_str(self, section, key, default=""):
+    def get_str(self, section, key, default=''):
         try:
             return self.config.get(section, key)
         except (configparser.NoSectionError, configparser.NoOptionError):
@@ -26,6 +26,4 @@ class ConfigManager:
             return self.config.getint(section, key)
         except (configparser.NoSectionError, configparser.NoOptionError, ValueError):
             return default
-
-# Global instance
 cfg = ConfigManager()

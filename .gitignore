@@ -27,3 +27,7 @@ dist/
 # OS Generated
 .DS_Store
 Thumbs.db
+
+# Generated Output
+qrcode.png
+qrcode.pdf
