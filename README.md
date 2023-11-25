@@ -1,18 +1,19 @@
 <div align="center">
-
-
-
-<div align="center">
-<div style="text-align: center;">
-  <h1 style="font-size: 2.2em;">VOID | <span style="color:#bd93f9;">QRcode</span></h1>
-
+  
 [![opensource](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](#)
 [![Licença](https://img.shields.io/badge/licença-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python](https://img.shields.io/badge/python-3.10+-green.svg)](https://www.python.org/)
 [![Estrelas](https://img.shields.io/github/stars/AndreBFarias/QR-Code-Void-Generator.svg?style=social)](https://github.com/AndreBFarias/QR-Code-Void-Generator/stargazers) [![Contribuições](https://img.shields.io/badge/contribuições-bem--vindas-brightgreen.svg)](https://github.com/AndreBFarias/QR-Code-Void-Generator/issues) 
   
-  
+
   <img src="assets/icon.png" width="200" alt="Logo VOID | QRcode">
+<div align="center">
+<div style="text-align: center;">
+  <h1 style="font-size: 2.2em;">VOID | <span style="color:#bd93f9;">QRcode</span></h1>
+
+
+  
+
 </div>
 </div></div>
 
