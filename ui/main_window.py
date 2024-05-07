@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QLis
 from PyQt6.QtCore import Qt, QSize, QTimer, QUrl
 from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
 from PyQt6.QtGui import QIcon, QPixmap, QColor, QAction, QImage, QPainter, QDesktopServices
-from PyQt6.QtGui import QIcon, QPixmap, QColor, QAction, QImage, QPainter, QDesktopServices
 from PIL import Image
 import logging
 logger = logging.getLogger(__name__)
@@ -95,7 +94,7 @@ class MainWindow(QMainWindow):
             self.sidebar.addItem(item)
         layout.addStretch(1)
         upload_frame = QFrame()
-        upload_frame.setStyleSheet('background-color: #21222C;')
+        upload_frame.setStyleSheet(f'background-color: {DraculaTheme.SIDEBAR};')
         upload_layout = QVBoxLayout(upload_frame)
         upload_layout.setContentsMargins(15, 20, 15, 20)
         upload_layout.setSpacing(10)
@@ -103,7 +102,7 @@ class MainWindow(QMainWindow):
         height = cfg.get_int('BlocoEsquerdo_Sidebar', 'AlturaBoxUpload', 220)
         upload_frame.setFixedHeight(height)
         lbl_upload = QLabel('Logo Personalizada')
-        lbl_upload.setStyleSheet('color: #bd93f9; font-weight: bold; font-size: 21px;')
+        lbl_upload.setStyleSheet(f'color: {DraculaTheme.PURPLE}; font-weight: bold; font-size: 21px;')
         lbl_upload.setAlignment(Qt.AlignmentFlag.AlignCenter)
         upload_layout.addWidget(lbl_upload)
         h_container = QWidget()
@@ -171,7 +170,7 @@ class MainWindow(QMainWindow):
         btn_copy = QPushButton('Copiar')
         btn_copy.setObjectName('secondaryBtn')
         btn_copy.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_copy.clicked.connect(self.copy_qr)
+        btn_copy.clicked.connect(self.copy_to_clipboard)
         btn_copy.setFixedHeight(50)
         btn_copy.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         layout.addWidget(btn_generate, stretch=2)
@@ -309,11 +308,11 @@ class MainWindow(QMainWindow):
 
         def make_header(text):
             lbl = QLabel(text)
-            lbl.setStyleSheet('font-weight: bold; font-size: 18px; color: #BD93F9; text-transform: none;')
+            lbl.setStyleSheet(f'font-weight: bold; font-size: 18px; color: {DraculaTheme.PURPLE}; text-transform: none;')
             return lbl
         layout.addStretch(1)
         lbl_personalizacao = QLabel('Personalização da Logo')
-        lbl_personalizacao.setStyleSheet('color: #ff79c6; font-weight: bold; font-size: 21px; margin-top: 0px;')
+        lbl_personalizacao.setStyleSheet(f'color: {DraculaTheme.PINK}; font-weight: bold; font-size: 21px; margin-top: 0px;')
         lbl_personalizacao.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(lbl_personalizacao)
         layout.addSpacing(15)
@@ -335,7 +334,7 @@ class MainWindow(QMainWindow):
         opacity_layout.setSpacing(5)
         opacity_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         lbl_opacity = QLabel('Opacidade')
-        lbl_opacity.setStyleSheet('color: #f8f8f2; font-size: 14px;')
+        lbl_opacity.setStyleSheet(f'color: {DraculaTheme.FOREGROUND}; font-size: 14px;')
         opacity_layout.addWidget(lbl_opacity)
         self.logo_opacity_slider = QSlider(Qt.Orientation.Horizontal)
         self.logo_opacity_slider.setRange(0, 100)
@@ -352,7 +351,7 @@ class MainWindow(QMainWindow):
         colors_layout.setSpacing(5)
         colors_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         lbl_colors = QLabel('Cores')
-        lbl_colors.setStyleSheet('color: #f8f8f2; font-size: 14px;')
+        lbl_colors.setStyleSheet(f'color: {DraculaTheme.FOREGROUND}; font-size: 14px;')
         colors_layout.addWidget(lbl_colors)
         colors_row = QHBoxLayout()
         colors_row.setSpacing(10)
@@ -360,7 +359,7 @@ class MainWindow(QMainWindow):
         self.fg_color_btn = QPushButton()
         self.fg_color_btn.setFixedSize(30, 30)
         self.fg_color_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.fg_color_btn.setStyleSheet(f'background-color: {self.fg_color}; border: 2px solid #fff; border-radius: 15px;')
+        self.fg_color_btn.setStyleSheet(f'background-color: {self.fg_color}; border: 2px solid {DraculaTheme.FOREGROUND}; border-radius: 15px;')
         self.fg_color_btn.setToolTip('Cor da Frente')
         self.fg_color_btn.clicked.connect(self.pick_fg_color)
         colors_row.addWidget(self.fg_color_btn)
@@ -368,12 +367,11 @@ class MainWindow(QMainWindow):
         self.bg_color_btn = QPushButton()
         self.bg_color_btn.setFixedSize(30, 30)
         self.bg_color_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.bg_color_btn.setStyleSheet(f'background-color: {self.bg_color}; border: 2px solid #fff; border-radius: 15px;')
+        self.bg_color_btn.setStyleSheet(f'background-color: {self.bg_color}; border: 2px solid {DraculaTheme.FOREGROUND}; border-radius: 15px;')
         self.bg_color_btn.setToolTip('Cor do Fundo')
         self.bg_color_btn.clicked.connect(self.pick_bg_color)
         colors_row.addWidget(self.bg_color_btn)
         colors_layout.addLayout(colors_row)
-        h_logo_layout.addWidget(colors_container)
         h_logo_layout.addWidget(colors_container)
         h_logo_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         logo_layout.addWidget(h_logo_container)
@@ -386,10 +384,31 @@ class MainWindow(QMainWindow):
         self.qr_label.clear()
         self.qr_label.setText('')
         if index != 3:
-            self.logo_path = None
-            self.logo_preview_sidebar.clear()
-            self.logo_preview_sidebar.setText('Arraste ou Selecione')
-            self.logo_preview_sidebar.setStyleSheet(f'border: 2px dashed {DraculaTheme.COMMENT}; border-radius: 8px; color: {DraculaTheme.COMMENT}; font-size: 14px; padding: 10px; font-weight: bold;')
+            assets_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'assets', 'logos')
+            default_logos = {
+                0: 'menu-url.svg',
+                1: 'wifi.svg',
+                2: 'menu-pix.svg'
+            }
+            if index in default_logos:
+                default_logo_path = os.path.join(assets_dir, default_logos[index])
+                if os.path.exists(default_logo_path):
+                    self.logo_path = default_logo_path
+                    pixmap = QPixmap(default_logo_path)
+                    if not pixmap.isNull():
+                        scaled = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+                        self.logo_preview_sidebar.setPixmap(scaled)
+                        self.logo_preview_sidebar.setStyleSheet('border: none;')
+                else:
+                    self.logo_path = None
+                    self.logo_preview_sidebar.clear()
+                    self.logo_preview_sidebar.setText('Arraste ou Selecione')
+                    self.logo_preview_sidebar.setStyleSheet(f'border: 2px dashed {DraculaTheme.COMMENT}; border-radius: 8px; color: {DraculaTheme.COMMENT}; font-size: 14px; padding: 10px; font-weight: bold;')
+            else:
+                self.logo_path = None
+                self.logo_preview_sidebar.clear()
+                self.logo_preview_sidebar.setText('Arraste ou Selecione')
+                self.logo_preview_sidebar.setStyleSheet(f'border: 2px dashed {DraculaTheme.COMMENT}; border-radius: 8px; color: {DraculaTheme.COMMENT}; font-size: 14px; padding: 10px; font-weight: bold;')
 
     def detect_wifi(self):
         ssid = get_wifi_ssid_linux()
@@ -440,14 +459,14 @@ class MainWindow(QMainWindow):
         color = QColorDialog.getColor(QColor(self.fg_color), self, 'Cor da Frente')
         if color.isValid():
             self.fg_color = color.name()
-            self.fg_color_btn.setStyleSheet(f'background-color: {self.fg_color}; border: 1px solid #fff; border-radius: 8px;')
+            self.fg_color_btn.setStyleSheet(f'background-color: {self.fg_color}; border: 1px solid {DraculaTheme.FOREGROUND}; border-radius: 8px;')
             self.generate_qr()
 
     def pick_bg_color(self):
         color = QColorDialog.getColor(QColor(self.bg_color), self, 'Cor do Fundo')
         if color.isValid():
             self.bg_color = color.name()
-            self.bg_color_btn.setStyleSheet(f'background-color: {self.bg_color}; border: 1px solid #fff; border-radius: 8px;')
+            self.bg_color_btn.setStyleSheet(f'background-color: {self.bg_color}; border: 1px solid {DraculaTheme.FOREGROUND}; border-radius: 8px;')
             self.generate_qr()
 
     def get_current_data(self):
@@ -668,9 +687,9 @@ class MainWindow(QMainWindow):
     def on_generation_error(self, error_msg):
         self.toast.show_message(f'Erro: {error_msg}')
 
-    def copy_qr(self):
+    def copy_to_clipboard(self):
         if self.current_qr_image:
             copy_to_clipboard(self.current_qr_image)
-            self.toast.show_message('Copiado para a área de transferência!')
+            self.toast.show_message('Copiado para a área de transferência!', target_widget=self.generate_btn)
         else:
-            self.toast.show_message('Nenhum QR Code gerado!')
+            self.toast.show_message('Nenhum QR Code gerado!', target_widget=self.generate_btn)

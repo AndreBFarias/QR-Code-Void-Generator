@@ -1,15 +1,25 @@
 import qrcode
+import logging
+import time
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer, SquareModuleDrawer
 from qrcode.image.styles.colormasks import SolidFillColorMask
 from PIL import Image
+
+logger = logging.getLogger(__name__)
 
 class QRGenerator:
 
     def __init__(self):
         pass
 
+    def _hex_to_rgb(self, color: str) -> tuple:
+        if color.startswith('#'):
+            return tuple(int(color.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+        return (0, 0, 0) if color == 'black' else (255, 255, 255)
+
     def generate_qr(self, data: str, error_correction: str='H', box_size: int=10, border: int=4, fill_color: str='black', back_color: str='white', rounded_modules: bool=True) -> Image.Image:
+        start_time = time.time()
         ec_map = {'L': qrcode.constants.ERROR_CORRECT_L, 'M': qrcode.constants.ERROR_CORRECT_M, 'Q': qrcode.constants.ERROR_CORRECT_Q, 'H': qrcode.constants.ERROR_CORRECT_H}
         qr = qrcode.QRCode(version=None, error_correction=ec_map.get(error_correction, qrcode.constants.ERROR_CORRECT_H), box_size=box_size, border=border)
         qr.add_data(data)
@@ -19,10 +29,11 @@ class QRGenerator:
             fill_color = 'black'
         if not back_color:
             back_color = 'white'
-        print(f'DEBUG: Generator Colors -> Back: {back_color}, Fill: {fill_color}')
-        img = qr.make_image(image_factory=StyledPilImage, module_drawer=module_drawer, color_mask=SolidFillColorMask(back_color=tuple((int(back_color.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))) if back_color.startswith('#') else (255, 255, 255), front_color=tuple((int(fill_color.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))) if fill_color.startswith('#') else (0, 0, 0)))
-        import logging
-        logger = logging.getLogger(__name__)
+        back_rgb = self._hex_to_rgb(back_color)
+        fill_rgb = self._hex_to_rgb(fill_color)
+        img = qr.make_image(image_factory=StyledPilImage, module_drawer=module_drawer, color_mask=SolidFillColorMask(back_color=back_rgb, front_color=fill_rgb))
+        gen_time = time.time() - start_time
+        logger.debug(f'QR code generation: {gen_time*1000:.2f}ms')
         if hasattr(img, '_img'):
             return img._img
         return img

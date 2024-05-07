@@ -149,25 +149,14 @@ class PreviewLabel(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setMouseTracking(True)
         self.setStyleSheet(f'background-color: {DraculaTheme.BACKGROUND}; border: 1px solid {DraculaTheme.CURRENT_LINE}; border-radius: 12px;')
         self.original_pixmap = None
-        self.is_zoomed = False
 
     def setPixmap(self, pixmap):
         self.original_pixmap = pixmap
         self.update_display()
 
-    def enterEvent(self, event):
-        if self.original_pixmap:
-            self.is_zoomed = True
-            self.update_display()
-        super().enterEvent(event)
 
-    def leaveEvent(self, event):
-        self.is_zoomed = False
-        self.update_display()
-        super().leaveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -195,22 +184,17 @@ class PreviewLabel(QLabel):
         if not self.original_pixmap:
             self.clear()
             return
-        target_pixmap = self.original_pixmap
-        if self.is_zoomed:
-            target_pixmap = self.original_pixmap.scaled(int(self.original_pixmap.width() * 1.05), int(self.original_pixmap.height() * 1.05), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-            super().setPixmap(target_pixmap)
-        else:
-            scaled_pixmap = self.original_pixmap.scaled(self.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-            rounded = QPixmap(scaled_pixmap.size())
-            rounded.fill(Qt.GlobalColor.transparent)
-            painter = QPainter(rounded)
-            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-            path = QPainterPath()
-            path.addRoundedRect(0, 0, scaled_pixmap.width(), scaled_pixmap.height(), 12, 12)
-            painter.setClipPath(path)
-            painter.drawPixmap(0, 0, scaled_pixmap)
-            painter.end()
-            super().setPixmap(rounded)
+        scaled_pixmap = self.original_pixmap.scaled(self.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+        rounded = QPixmap(scaled_pixmap.size())
+        rounded.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(rounded)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        path = QPainterPath()
+        path.addRoundedRect(0, 0, scaled_pixmap.width(), scaled_pixmap.height(), 18, 18)
+        painter.setClipPath(path)
+        painter.drawPixmap(0, 0, scaled_pixmap)
+        painter.end()
+        super().setPixmap(rounded)
 
 class LogoLabel(QLabel):
     clicked = pyqtSignal()
