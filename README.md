@@ -85,4 +85,4 @@ Ou use o atalho "VOID | QRcode" no seu menu de aplicativos.
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT.
+Distribuído sob a [GPLv3](LICENSE).
