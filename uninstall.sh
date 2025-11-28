@@ -1,14 +1,10 @@
 #!/bin/bash
-#
-# RITUAL DE BANIMENTO: VOID | QRcode
-#
 
 echo "=== Iniciando o Ritual de Banimento (VOID | QRcode) ==="
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 APP_NAME="qrcode-void-generator"
 ICON_NAME="${APP_NAME}"
 
-# Locais possíveis
 DESKTOP_ENTRY_DIR_USER="${HOME}/.local/share/applications"
 ICON_INSTALL_SIZE_DIR_USER="${HOME}/.local/share/icons/hicolor/64x64/apps"
 DESKTOP_ENTRY_DIR_SYSTEM="/usr/local/share/applications"
@@ -27,21 +23,17 @@ if [[ -f "${DESKTOP_FILE_PATH_SYSTEM}" || -f "${ICON_INSTALL_PATH_SYSTEM}" ]]; t
     fi
 fi
 
-# 1. Remover ambiente virtual
 echo "[1/3] Quebrando o círculo de proteção (venv)..."
 rm -rf "${SCRIPT_DIR}/venv"
 
-# 2. Remover o Lançador (.desktop)
 echo "[2/3] Apagando o sigilo de invocação (.desktop)..."
 if [[ -f "${DESKTOP_FILE_PATH_USER}" ]]; then rm -f "${DESKTOP_FILE_PATH_USER}"; fi
 if [[ -f "${DESKTOP_FILE_PATH_SYSTEM}" ]]; then $SUDO_CMD rm -f "${DESKTOP_FILE_PATH_SYSTEM}"; fi
 
-# 3. Remover o Ícone
 echo "[3/3] Desconsagrando o ícone..."
 if [[ -f "${ICON_INSTALL_PATH_USER}" ]]; then rm -f "${ICON_INSTALL_PATH_USER}"; fi
 if [[ -f "${ICON_INSTALL_PATH_SYSTEM}" ]]; then $SUDO_CMD rm -f "${ICON_INSTALL_PATH_SYSTEM}"; fi
 
-# Atualiza caches
 if command -v update-desktop-database &> /dev/null; then
     if [[ -d "${DESKTOP_ENTRY_DIR_USER}" ]]; then update-desktop-database "${DESKTOP_ENTRY_DIR_USER}" >/dev/null 2>&1; fi
     if [[ -d "${DESKTOP_ENTRY_DIR_SYSTEM}" ]]; then $SUDO_CMD update-desktop-database "${DESKTOP_ENTRY_DIR_SYSTEM}" >/dev/null 2>&1; fi
