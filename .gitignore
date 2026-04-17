@@ -1,33 +1,28 @@
-# Python
-__pycache__/
-*.py[cod]
+
 *$py.class
-
-# Virtual Environment
-venv/
-.venv/
-env/
-.env/
-
-# Logs
-*.log
 app.log
-
-# Distribution / Packaging
 build/
 dist/
-*.egg-info/
-
-# IDE / Editor
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS Generated
+# Distribution / Packaging
 .DS_Store
-Thumbs.db
-
+*.egg-info/
+.env/
+env/
 # Generated Output
-qrcode.png
+.idea/
+# IDE / Editor
+*.log
+# Logs
+# OS Generated
+__pycache__/
+*.py[cod]
+# Python
 qrcode.pdf
+qrcode.png
+*.swo
+*.swp
+Thumbs.db
+.venv/
+venv/
+# Virtual Environment
+.vscode/
